@@ -10,42 +10,6 @@ import lyrics as minilyrics
 error = "Error: Could not find lyrics."
 proxy = urllib.request.getproxies()
 
-def _minilyrics(artist, song):
-    url = ""
-    timed = False
-    try:
-        data = minilyrics.MiniLyrics(artist, song)
-        for item in data:
-            if item['url'].endswith(".lrc"):
-                url = item['url']
-                break
-        lyrics = requests.get(url, proxies=proxy).text
-        timed = True
-    except Exception:
-        lyrics = error
-    if url == "":
-        lyrics = error
-    if artist.lower().replace(" ", "") not in lyrics.lower().replace(" ", ""):
-        lyrics = error
-        timed = False
-
-    return(lyrics, url, timed)
-
-def _wikia(artist, song):
-    url = ""
-    try:
-        lyrics = minilyrics.LyricWikia(artist, song)
-        url = "http://lyrics.wikia.com/%s:%s" % (artist.replace(' ', '_'), song.replace(' ', '_'))
-    except Exception:
-        lyrics = error
-    if "TrebleClef.png" in lyrics:
-        lyrics = "(Instrumental)"
-    if "Instrumental" in lyrics:
-        lyrics = "(Instrumental)"
-    if lyrics == "error":
-        lyrics = error
-    return(lyrics, url)
-
 def _musixmatch(artist, song):
     url = ""
     try:
